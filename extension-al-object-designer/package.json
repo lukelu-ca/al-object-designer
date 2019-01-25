@@ -62,7 +62,7 @@
         },
         "configuration": {
             "type": "object",
-            "title": "AL Object Designer configuration",
+            "title": "AL Object Designer",
             "properties": {
                 "alObjectDesigner.renderPageParts": {
                     "type": "boolean",
