@@ -83,6 +83,12 @@ export class ALPanel {
         await ALPanel.open(extensionPath, ALObjectDesigner.PanelMode.Design, objectInfo);
     }
 
+    public static async command(extensionPath: string, objectInfo: any) {
+        await ALPanel.open(extensionPath, ALObjectDesigner.PanelMode.List, objectInfo);
+        let handler: ALCommandHandler = new ALCommandHandler((ALPanel.currentPanel as ALPanel), extensionPath);
+        await handler.dispatch(objectInfo);
+    }
+
     private constructor(
         panel: vscode.WebviewPanel,
         extensionPath: string,

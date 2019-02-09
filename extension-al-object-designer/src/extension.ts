@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { ALPanel } from './ALPanel';
 import { ALObjectDesigner } from './ALModules';
+import querystring = require('querystring');
 
 // this method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
@@ -21,6 +22,15 @@ export function activate(context: vscode.ExtensionContext) {
         } catch (e) {
             console.error(e);
             vscode.window.showErrorMessage(`AL Page Designer could not be opened. Error: '${e.message}'`);
+        }
+    }));
+
+    context.subscriptions.push(vscode.window.registerUriHandler(<vscode.UriHandler>{
+        async handleUri(uri: vscode.Uri) {
+            let q = querystring.parse(uri.query);
+            q.FsPath = "";
+            await ALPanel.command(context.extensionPath, q);
+            vscode.window.showInformationMessage(JSON.stringify(q));
         }
     }));
 }
