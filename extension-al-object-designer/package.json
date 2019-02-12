@@ -74,6 +74,11 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Show standard Table and Field events, e.g. OnBeforeInsert or OnAfterValidate. Slooow! :("
+                },
+                "alObjectDesigner.VsCodeBrowserPreview": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "(Experimental) Turn on 'Preview' context menu on Object List. Hopefully it will work someday."
                 }
             }
         }

@@ -197,7 +197,7 @@ export class ALPanel {
         content = content.replace('${objectInfo}', JSON.stringify(this.objectInfo));
         content = content.replace('${vsSettings}', JSON.stringify(this._vsSettings));
 
-
+        
         return content;
     }
 }
