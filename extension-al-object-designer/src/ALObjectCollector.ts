@@ -3,10 +3,11 @@ import * as path from 'path';
 import * as utils from './utils';
 import { ALSymbolPackage, ALObjectDesigner } from './ALModules';
 import { ALObjectCollectorCache } from './ALObjectCollectorCache';
+import { ALEventGenerator } from './ALEventGenerator';
 const firstBy = require('thenby');
 
 export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
-
+    private _vsSettings: any;
     public events: Array<any> = [];
     private collectorCache: ALObjectCollectorCache;
 
@@ -44,6 +45,7 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
 
     public constructor() {
         this.collectorCache = new ALObjectCollectorCache();
+        this._vsSettings = utils.getVsConfig();
     }
 
     public async discover() {
@@ -98,7 +100,7 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
         if (dalFiles.length > 0) {
             projectFiles = res.pop();
         }
-        
+
         for (let arr of res) {
             objs = objs.concat(arr);
         }
@@ -277,6 +279,14 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                         });
                     }
                 }
+            }
+        }
+
+        if (this._vsSettings.showStandardEvents === true) {
+            if (type == 'Table') {
+                let generator = new ALEventGenerator();
+                let events = generator.generateTableEvents(item, info);
+                levents = levents.concat(events);
             }
         }
 

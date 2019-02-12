@@ -69,6 +69,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Render PageParts in AL Page Designer."
+                },
+                "alObjectDesigner.showStandardEvents": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show standard Table and Field events, e.g. OnBeforeInsert or OnAfterValidate. Slooow! :("
                 }
             }
         }
