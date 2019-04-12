@@ -1,8 +1,7 @@
-import { eventNames } from "cluster";
-
 export class ALEventGenerator {
-    generateTableEvents(symbol: any, info: any) {
+    generateTableEvents(symbol: any, info: any, includeFields: boolean) {
         let eventTemplate = {
+            'TypeId': info.TypeId,
             'Type': 'Table',
             'Id': symbol.Id,
             'Name': symbol.Name,
@@ -21,6 +20,7 @@ export class ALEventGenerator {
         };
 
         let result: Array<any> = [];
+
         // creating global trigger events
         result.push(this.getTableEvent(eventTemplate, 'OnAfterDeleteEvent', false, true, ''));
         result.push(this.getTableEvent(eventTemplate, 'OnAfterInsertEvent', false, true, ''));
@@ -31,12 +31,13 @@ export class ALEventGenerator {
         result.push(this.getTableEvent(eventTemplate, 'OnBeforeModifyEvent', true, true, ''));
         result.push(this.getTableEvent(eventTemplate, 'OnBeforeRenameEvent', true, true, ''));
 
-        // field level events
-        for (let field of symbol.Fields) {
-            result.push(this.getTableEvent(eventTemplate, 'OnAfterValidateEvent', true, false, field.Name));
-            result.push(this.getTableEvent(eventTemplate, 'OnBeforeValidateEvent', true, false, field.Name));
+        if (includeFields === true) {
+            // field level events
+            for (let field of symbol.Fields) {
+                result.push(this.getTableEvent(eventTemplate, 'OnAfterValidateEvent', true, false, field.Name));
+                result.push(this.getTableEvent(eventTemplate, 'OnBeforeValidateEvent', true, false, field.Name));
+            }
         }
-
         return result;
     }
 

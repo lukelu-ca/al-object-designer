@@ -2,7 +2,7 @@
     "name": "al-object-designer",
     "displayName": "AL Object Designer",
     "description": "Object Designer optimized for (Dynamics 365 Business Central) AL Language development.",
-    "version": "0.0.7-alpha.1",
+    "version": "0.0.7-alpha.2",
     "publisher": "martonsagi",
     "license": "MIT",
     "author": {
@@ -73,7 +73,12 @@
                 "alObjectDesigner.showStandardEvents": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Show standard Table and Field events, e.g. OnBeforeInsert or OnAfterValidate. Slooow! :("
+                    "description": "Show standard Table events, e.g. OnBeforeInsert or OnAfterDelete."
+                },
+                "alObjectDesigner.showStandardFieldEvents": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Show standard Field events, e.g. OnBeforeValidate or OnAfterValidate for each Table Field. (Poor performance warning)"
                 },
                 "alObjectDesigner.VsCodeBrowserPreview": {
                     "type": "boolean",

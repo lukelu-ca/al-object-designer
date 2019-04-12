@@ -104,7 +104,7 @@ export class App {
           || f.Publisher.toLowerCase().indexOf(this.query.toLowerCase()) != -1
           || f.Version.toLowerCase().indexOf(this.query.toLowerCase()) != -1
           || this.searchParts(this.query, `${f.Type}${f.Id}`) == true
-          || this.searchParts(this.query, this.showEvents ? `${f.Name} ${f.EventName}` : f.Name) == true)
+          || this.searchParts(this.query, this.showEvents ? `${f.Name} ${f.FieldName != '' ? f.FieldName+' ' : ''}${f.EventName}` : f.Name) == true)
       );
 
     this.count = this.results.length;

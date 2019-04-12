@@ -6046,7 +6046,7 @@ define('app',["require", "exports", "aurelia-framework"], function (require, exp
                             || f.Publisher.toLowerCase().indexOf(_this.query.toLowerCase()) != -1
                             || f.Version.toLowerCase().indexOf(_this.query.toLowerCase()) != -1
                             || _this.searchParts(_this.query, "" + f.Type + f.Id) == true
-                            || _this.searchParts(_this.query, _this.showEvents ? f.Name + " " + f.EventName : f.Name) == true);
+                            || _this.searchParts(_this.query, _this.showEvents ? f.Name + " " + (f.FieldName != '' ? f.FieldName + ' ' : '') + f.EventName : f.Name) == true);
             });
             this.count = this.results.length;
         };
