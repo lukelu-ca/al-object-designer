@@ -62,7 +62,7 @@ input#searchInput {
 }
 
 div.content {
-    padding: 200px 40px 20px;
+    padding: 160px 20px 20px;
 }
 
 div.designer-content {
@@ -153,7 +153,7 @@ tr.selected .td-name a:focus {
 }
 
 .virtual-repeater-wrapper {
-    height: 70vh;
+    height: 80vh;
     vertical-align: top;
     overflow: scroll;
     overflow-x: hidden;
@@ -212,7 +212,8 @@ tr.selected:hover td#context-selected {
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.47) 0px 0px 7px 0px;
     z-index: 1001;
-    margin-left: -90px;
+    margin-left: -190px;
+    margin-top: -100px;
 }
 
 .context-menu-ul li {
@@ -230,7 +231,7 @@ tr.selected:hover td#context-selected {
 
 .new-object-link {
     display: inline-block;
-    min-width: 100px;
+    min-width: 50px;
     font-size: 16px;
     cursor: pointer;
     color: rgb(0, 126, 135);
@@ -313,6 +314,21 @@ tr.selected:hover td#context-selected {
     background: rgb(178, 233, 237) !important;
 }
 
+
+
+.ui-sidebar.object-types {
+    max-width: 10em !important;
+}
+
+
+.ui-sidebar.object-types.ui-collapse.ui-mini-display {
+    max-width: 6em !important;
+}
+
+.td-number {
+    text-align: right !important;
+}
+
 /*
  * http://fatopng.com/fontawesome-to-base64 :D
  */
@@ -367,7 +383,7 @@ tr.selected:hover td#context-selected {
     }
 
     div.content {
-        padding-top: 280px;
+        padding-top: 160px;
     }
 
     div.designer-content {

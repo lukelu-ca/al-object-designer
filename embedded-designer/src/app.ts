@@ -3,8 +3,13 @@ const panelMode = (window as any).panelMode;
 const objectInfo = (window as any).objectInfo;
 const vsSettings = (window as any).vsSettings;
 import { observable } from 'aurelia-framework';
+import { ColumnApi, GridApi, GridOptions } from 'ag-grid-community';
 
 export class App {
+
+  private gridOptions: GridOptions;
+  private api: GridApi;
+  private columnApi: ColumnApi;
 
   data: Array<any> = [];
   results: Array<any> = [];
@@ -12,6 +17,7 @@ export class App {
   activeType: string = "";
   count: number = 0;
   loaded: boolean = false;
+  contextMenu: HTMLElement;
 
   mode: string;
   customLinks: Array<any> = [];
@@ -39,7 +45,26 @@ export class App {
   dragOptions: any;
 
   constructor() {
+    this.gridOptions = <GridOptions>{
+      defaultColDef: {
+        resizable: true,
+        sortable: true,
+        editable: false
+      }
+    };
+
     
+    this.gridOptions.onGridReady = () => {
+      this.api = this.gridOptions.api;
+      this.columnApi = this.gridOptions.columnApi;
+
+      this.columnApi.setColumnVisible("EventType" as any, this.showEvents);
+      this.columnApi.setColumnVisible("EventName" as any, this.showEvents);
+      this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
+      this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
+      this.columnApi.setColumnVisible("Application" as any, !this.showEvents);  
+    }
+
   }
 
   attached() {
@@ -48,7 +73,7 @@ export class App {
     this.activeType = "";
     this.currentProject = false;
     this.vsSettings = vsSettings;
-    
+
     window.addEventListener('message', event => {
       this.loaded = false;
       const message = event.data; // The JSON data our extension sent
@@ -104,7 +129,7 @@ export class App {
           || f.Publisher.toLowerCase().indexOf(this.query.toLowerCase()) != -1
           || f.Version.toLowerCase().indexOf(this.query.toLowerCase()) != -1
           || this.searchParts(this.query, `${f.Type}${f.Id}`) == true
-          || this.searchParts(this.query, this.showEvents ? `${f.Name} ${f.FieldName != '' ? f.FieldName+' ' : ''}${f.EventName}` : f.Name) == true)
+          || this.searchParts(this.query, this.showEvents ? `${f.Name} ${f.FieldName != '' ? f.FieldName + ' ' : ''}${f.EventName}` : f.Name) == true)
       );
 
     this.count = this.results.length;
@@ -181,14 +206,12 @@ export class App {
     return search.test(what) == true;
   }
 
-  selectRow(elem, target) {
+  selectRow(elem, event) {
     if (this.selectedObject == elem) {
       return;
     }
 
-    console.log(target.tagName);
-
-    this.showMenu = target.tagName.toLowerCase() == "a" && target.className.indexOf("context-menu-btn") != -1;
+    this.showMenu = event.target.tagName.toLowerCase() == "a" && event.target.className.indexOf("context-menu-btn") != -1;
     this.selectedObject = elem;
   }
 
@@ -201,13 +224,26 @@ export class App {
     this.hoverObject = elem;
   }
 
-  setContextMenuVisible() {
+  setContextMenuVisible(event, currRec) {
+    console.log(event);
+
+    this.selectRow(currRec, event);
     this.showMenu = !this.showMenu;
+    let rect = (event.target as HTMLElement).getBoundingClientRect();
+    this.contextMenu.style.left = rect.left + 'px';
+    this.contextMenu.style.top = rect.top + 'px';    
   }
 
   setEventsView() {
     this.showEvents = !this.showEvents;
     this.headerType = this.showEvents ? 'event' : 'object';
+
+    this.columnApi.setColumnVisible("EventType" as any, this.showEvents);
+    this.columnApi.setColumnVisible("EventName" as any, this.showEvents);
+    this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
+    this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
+    this.columnApi.setColumnVisible("Application" as any, !this.showEvents);
+
     this.search();
   }
 
@@ -236,6 +272,10 @@ export class App {
 
   openPageDesigner(element) {
     this.sendCommand(element, 'Design');
+  }
+
+  compilerCommand(type) {
+    this.sendCommand(type, 'Compiler');
   }
 
   showEventParams(element) {
