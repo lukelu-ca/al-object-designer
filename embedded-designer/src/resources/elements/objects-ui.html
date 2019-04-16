@@ -23,11 +23,9 @@
         
                 </ui-menu>
             </ui-sidebar>
-            <ui-content padded scroll>
-
-
+            <ui-content scroll>
                 <div hidden.bind="loaded">
-                    <h1>Discovering objects...</h1>
+                    <div style="font-size: 1.2em;" class="ui-bg-primary ui-pad-all ui-text-white">Discovering objects...</div>
                 </div>
 
                 <ul ref="contextMenu" show.bind="showMenu == true" class="context-menu-ul">
@@ -75,7 +73,8 @@
                         context.bind="$this" 
                         row-data.bind="results"
                         row-selection.bind="'single'"
-                        row-selected.call="selectRow($event)"
+                        row-selected.call="selectRow($event.node.data, $event)"
+                        selection-changed.call="selectRow($event.node.data, $event)"
                         grid-options.bind="gridOptions">
                         <ag-grid-column header-name="Type" field="Type" editable.bind="false" width.bind="100"></ag-grid-column>
                         <ag-grid-column header-name="ID" field="Id" width.bind="100" header-class.bind="'td-number'" cell-class.bind="'td-number'"></ag-grid-column>
@@ -105,10 +104,8 @@
                         <ag-grid-column header-name="Application" width.bind="150" field="Application"></ag-grid-column>
                         <ag-grid-column header-name="Version" width.bind="150" field="Version"></ag-grid-column>
                         <ag-grid-column header-name="Publisher" width.bind="150" field="Publisher"></ag-grid-column>
-                    </ag-grid-aurelia>
+                    </ag-grid-aurelia>                    
                 </div>
-
-
             </ui-content>
         </ui-section>
     </div>

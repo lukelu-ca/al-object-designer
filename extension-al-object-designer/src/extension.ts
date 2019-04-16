@@ -18,10 +18,19 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand('extension.openALDesignWindow', async () => {
         try {
-            await ALPanel.openDesigner(context.extensionPath);
+            await ALPanel.openDesigner(context.extensionPath, ALObjectDesigner.PanelMode.Design);
         } catch (e) {
             console.error(e);
             vscode.window.showErrorMessage(`AL Page Designer could not be opened. Error: '${e.message}'`);
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('extension.openALTableDesignWindow', async () => {
+        try {
+            await ALPanel.openDesigner(context.extensionPath, ALObjectDesigner.PanelMode.Table);
+        } catch (e) {
+            console.error(e);
+            vscode.window.showErrorMessage(`AL Table Designer could not be opened. Error: '${e.message}'`);
         }
     }));
 

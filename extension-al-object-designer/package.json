@@ -48,18 +48,31 @@
             {
                 "command": "extension.openALDesignWindow",
                 "title": "AL Page Designer"
+            },
+            {
+                "command": "extension.openALTableDesignWindow",
+                "title": "AL Table Designer"
             }
         ],
         "menus": {
-            "editor/title": [{
-                "when": "resourceLangId == al",
-                "command": "extension.openALDesignWindow",
-                "group": "navigation"
-            }],
-            "explorer/context": [{
-                "command": "extension.openALWindow",
-                "group": "2_workspace"
-            }]
+            "editor/title": [
+                {
+                    "when": "resourceLangId == al",
+                    "command": "extension.openALDesignWindow",
+                    "group": "navigation"
+                },
+                {
+                    "when": "resourceLangId == al",
+                    "command": "extension.openALTableDesignWindow",
+                    "group": "navigation"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "extension.openALWindow",
+                    "group": "2_workspace"
+                }
+            ]
         },
         "configuration": {
             "type": "object",

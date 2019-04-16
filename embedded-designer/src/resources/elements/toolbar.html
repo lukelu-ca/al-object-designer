@@ -1,27 +1,33 @@
 <template>
     <div class="object-bar buttons">
         <ui-toolbar style="background: none;">
-            <span>Launch config: </span>
-            <ui-dropdown value="0">
-                <ui-list-item value="0">Local</ui-list-item>
-                <ui-list-item value="1">Cloud</ui-list-item>
+            <ui-switch secondary value.bind="showEvents" click.trigger="setEventsView()" on-label="Events"
+                off-label="Events" size="5em"></ui-switch>
+            <span>Launch config:&nbsp;</span>
+            <ui-dropdown width="10em">
+                <ui-list-item value="1">Local</ui-list-item>
+                <ui-list-item value="2">Cloud</ui-list-item>
             </ui-dropdown>
             <ui-button primary click.trigger="compilerCommand('build')">Build</ui-button>
             <ui-button success click.trigger="compilerCommand('run')">Publish</ui-button>
             <ui-button secondary click.trigger="compilerCommand('debug')">Debug</ui-button>
+            <span>&nbsp;Snippets:&nbsp;</span>
+            <ui-dropdown width="10em">
+                <ui-list-group label="Built-in">
+                    <ui-list-item value="1" click.delegate="addNewObject('empty')">
+                        New Object
+                    </ui-list-item>
+                </ui-list-group>
+                <ui-list-group label="Custom">
+                    <ui-list-item repeat.for="link of customLinks" click.delegate="addNewCustomObject(link)"
+                        title="link.description">
+                        ${link.title}
+                    </ui-list-item>
+                </ui-list-group>
+            </ui-dropdown>
             <ui-filler></ui-filler>
-            <ui-switch secondary value.bind="showEvents" click.trigger="setEventsView()" on-label="Events"
-                off-label="Events" size="5em"></ui-switch>
+            <ui-button click.delegate="refreshDesigner()" title="Reload object list">Refresh</ui-button>
         </ui-toolbar>
-        </ui-toolbar>
-        <ui-toolbar style="background: none;">
-            <span class="new-object-link" click.delegate="refreshDesigner()" title="Create a new Object"
-                style="cursor: pointer">Refresh</span>
-            <span class="new-object-link" click.delegate="addNewObject('empty')" title="Create a new Object"
-                style="cursor: pointer">+
-                New Object</span>
-            <span repeat.for="link of customLinks" class="new-object-link" click.delegate="addNewCustomObject(link)"
-                title="link.description" style="cursor: pointer">${link.title}</span>
-            <ui-filler></ui-filler>
+
     </div>
 </template>

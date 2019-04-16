@@ -151,6 +151,7 @@ export class App {
     }
 
     this.count = this.results.length;
+    this.selectedObject = null;
   }
 
   sendCommand(element, command, additionalCommands?: any) {
@@ -207,11 +208,17 @@ export class App {
   }
 
   selectRow(elem, event) {
+    if (!event.node || event.node.selected !== true) {
+      return;
+    }
+
     if (this.selectedObject == elem) {
       return;
     }
 
-    this.showMenu = event.target.tagName.toLowerCase() == "a" && event.target.className.indexOf("context-menu-btn") != -1;
+    let target = event.target;
+    if (target)
+      this.showMenu = target.tagName.toLowerCase() == "a" && target.className.indexOf("context-menu-btn") != -1;
     this.selectedObject = elem;
   }
 
