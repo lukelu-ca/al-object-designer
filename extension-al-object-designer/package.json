@@ -47,11 +47,7 @@
             },
             {
                 "command": "extension.openALDesignWindow",
-                "title": "AL Page Designer"
-            },
-            {
-                "command": "extension.openALTableDesignWindow",
-                "title": "AL Table Designer"
+                "title": "AL Designer"
             }
         ],
         "menus": {
@@ -59,11 +55,6 @@
                 {
                     "when": "resourceLangId == al",
                     "command": "extension.openALDesignWindow",
-                    "group": "navigation"
-                },
-                {
-                    "when": "resourceLangId == al",
-                    "command": "extension.openALTableDesignWindow",
                     "group": "navigation"
                 }
             ],

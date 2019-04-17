@@ -58,7 +58,7 @@ export class ALPanel {
         //await ALPanel.currentPanel.update();
     }
 
-    public static async openDesigner(extensionPath: string, mode: ALObjectDesigner.PanelMode) {
+    public static async openDesigner(extensionPath: string) {
         let path = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.uri.fsPath : '';
         if (path == '') {
             return;
@@ -75,9 +75,18 @@ export class ALPanel {
         objectInfo.Name = symbol.Name;
         objectInfo.Type = utils.toUpperCaseFirst(symbol.Type);
 
+        let mode = ALObjectDesigner.PanelMode.Design;
+        switch (symbol.Type.toLowerCase()) {
+            case 'table':
+                mode = ALObjectDesigner.PanelMode.Table;
+                break;
+            // TODO: to be extended later
+        }
+
         // TODO: to be extended later
         if (["table", "page"].indexOf(symbol.Type.toLowerCase()) == -1) {
-            await vscode.window.showErrorMessage(`${objectInfo.Type} ${objectInfo.Id} ${objectInfo.Name} cannot be opened in Table/Page Designer. :(`);
+            vscode.window.showErrorMessage(`${objectInfo.Type} ${objectInfo.Id} ${objectInfo.Name} cannot be opened in Table/Page Designer. :(`);
+            return;
         }
 
         await ALPanel.open(extensionPath, mode, objectInfo);

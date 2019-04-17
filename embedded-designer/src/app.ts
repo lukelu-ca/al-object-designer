@@ -44,6 +44,8 @@ export class App {
 
   dragOptions: any;
 
+  allRowsSelected: boolean = false;
+
   constructor() {
     this.gridOptions = <GridOptions>{
       defaultColDef: {
@@ -291,5 +293,18 @@ export class App {
 
   designerFieldOnClick(event) {
     console.log(event);
+  }
+
+  markAllObjects(event, record) {
+    for (let row of this.results) {
+      row.Marked = !row.Marked;
+    }
+
+    this.allRowsSelected = !this.allRowsSelected;
+  }
+  
+
+  markSelectedObject(event, record) {
+    
   }
 }
