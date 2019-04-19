@@ -178,7 +178,7 @@ tr.selected:hover {
     background: rgb(178, 233, 237) !important;
 }
 
-td.context-menu-td {
+.context-menu-td {
     padding: 0px;
 }
 
@@ -214,8 +214,8 @@ tr.selected:hover td#context-selected {
     background: #fff;
     box-shadow: rgba(0, 0, 0, 0.47) 0px 0px 7px 0px;
     z-index: 1001;
-    margin-left: -190px;
-    margin-top: -100px;
+    margin-left: -140px;
+    margin-top: -75px;
 }
 
 .context-menu-ul li {
@@ -363,6 +363,15 @@ tr.selected:hover td#context-selected {
     max-width: inherit;
 }
 
+.ag-theme-material .ag-cell-inline-editing {
+    height: inherit;
+}
+
+.ag-cell.ag-cell-with-height.ag-cell-value.ag-cell-focus.ag-cell-inline-editing,
+.ag-has-focus .ag-cell-focus,
+.ag-theme-material .ag-cell-inline-editing input[type="text"]:focus, .ag-theme-material .ag-cell-inline-editing input[type="tel"]:focus, .ag-theme-material .ag-cell-inline-editing input[type="date"]:focus, .ag-theme-material .ag-cell-inline-editing input[type="datetime-local"]:focus, .ag-theme-material .ag-popup-editor input[type="text"]:focus, .ag-theme-material .ag-popup-editor input[type="tel"]:focus, .ag-theme-material .ag-popup-editor input[type="date"]:focus, .ag-theme-material .ag-popup-editor input[type="datetime-local"]:focus {
+    border-color: #008089 !important;
+}
 
 /*
  * http://fatopng.com/fontawesome-to-base64 :D

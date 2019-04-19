@@ -74,19 +74,25 @@
                         row-data.bind="results"
                         row-selection.bind="'single'"
                         row-selected.call="selectRow($event.node.data, $event)"
-                        selection-changed.call="selectRow($event.node.data, $event)"
+                        cell-focused.call="selectionChanged($event.node.data, $event)"
+                        cell-mouse-over.call="setContextBtnVisible($event.node.data)" 
+                        cell-mouse-out.call="setContextBtnVisible(null)"
                         grid-options.bind="gridOptions">
-                        <ag-grid-column header-name="Select" pinned.bind="'left'" width.bind="55">
+                        <ag-grid-column header-name="Select" pinned.bind="'left'" width.bind="70" editable.bind="false">
                             <ag-header-template>
-                                <input type="checkbox" checked.bind="allRowsSelected" click.delegate="params.context.markAllObjects($event, params.data)">
+                                <label style="margin-left: -15px;">
+                                    <ui-switch secondary value.bind="params.context.allRowsSelected" click.trigger="params.context.markAllObjects($event, params.data)" on-label="All"
+                                    off-label="All" size="2em"></ui-switch>
+                                </label>
                             </ag-header-template>
                             <ag-cell-template>
-                                <input type="checkbox" checked.bind="params.data.Marked">
+                                <label style="padding: 15px; margin-left: -15px;"><input type="checkbox" checked.bind="params.data.Marked"></label>
                             </ag-cell-template>
                         </ag-grid-column>
                         <ag-grid-column header-name="Type" field="Type" editable.bind="false" width.bind="100"></ag-grid-column>
-                        <ag-grid-column header-name="ID" field="Id" width.bind="100" header-class.bind="'td-number'" cell-class.bind="'td-number'"></ag-grid-column>
-                        <ag-grid-column class="context-menu-td" editable.bind="false" width.bind="50">
+                        <ag-grid-column header-name="ID" field="Id" width.bind="120" header-class.bind="'td-number'" cell-class.bind="'td-number'"></ag-grid-column>
+                        <ag-grid-column cell-class="context-menu-td" editable.bind="false" width.bind="50" 
+                            col-id.bind="selectedObject == element || hoverObject == element ? 'context-selected' : ''">
                             <ag-cell-template>
                                 <a class="context-menu-btn" class="context-menu"
                                     click.trigger="params.context.setContextMenuVisible($event, params.data)">&nbsp;
@@ -100,7 +106,7 @@
                                     || ''}</a>
                             </ag-cell-template>
                         </ag-grid-column>
-                        <ag-grid-column header-name="Event Name" width.bind="150" field="EventName" width.bind="300">
+                        <ag-grid-column header-name="Event Name" width.bind="250" field="EventName" width.bind="300"  editable.bind="true">
                             <ag-cell-template>
                                 <a href="#click" click.delegate="params.context.showEventParams(params.data)">
                                     <span if.bind="params.data.FieldName != ''">${params.data.FieldName} -
@@ -108,10 +114,10 @@
                                 </a>
                             </ag-cell-template>
                         </ag-grid-column>
-                        <ag-grid-column header-name="Event Type" width.bind="100" field="EventType"></ag-grid-column>
-                        <ag-grid-column header-name="Application" width.bind="150" field="Application"></ag-grid-column>
-                        <ag-grid-column header-name="Version" width.bind="150" field="Version"></ag-grid-column>
-                        <ag-grid-column header-name="Publisher" width.bind="150" field="Publisher"></ag-grid-column>
+                        <ag-grid-column header-name="Event Type" width.bind="100" field="EventType" editable.bind="false"></ag-grid-column>
+                        <ag-grid-column header-name="Application" width.bind="150" field="Application" editable.bind="false"></ag-grid-column>
+                        <ag-grid-column header-name="Version" width.bind="150" field="Version" editable.bind="false"></ag-grid-column>
+                        <ag-grid-column header-name="Publisher" width.bind="150" field="Publisher" editable.bind="false"></ag-grid-column>
                     </ag-grid-aurelia>                    
                 </div>
             </ui-content>

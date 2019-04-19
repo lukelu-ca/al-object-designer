@@ -44,7 +44,10 @@ export class App {
 
   dragOptions: any;
 
-  allRowsSelected: boolean = false;
+  @observable
+  allRowsSelected: boolean = false;  
+
+  showMarkedOnly: boolean = false;
 
   constructor() {
     this.gridOptions = <GridOptions>{
@@ -126,6 +129,8 @@ export class App {
         (this.activeType != "" ? f.Type == this.activeType : true)
         &&
         (this.currentProject == true ? f.FsPath != "" : true)
+        &&
+        (this.showMarkedOnly === true ? f.Marked == true : true)
         &&
         (f.Id.toString().indexOf(this.query.toLowerCase()) != -1
           || f.Publisher.toLowerCase().indexOf(this.query.toLowerCase()) != -1
@@ -209,6 +214,14 @@ export class App {
     return search.test(what) == true;
   }
 
+  selectionChanged(elem, event) {
+    let target = event.target;
+    if (target)
+      this.showMenu = target.tagName.toLowerCase() == "a" && target.className.indexOf("context-menu-btn") != -1;
+    else
+      this.showMenu = false;
+  }
+
   selectRow(elem, event) {
     if (!event.node || event.node.selected !== true) {
       return;
@@ -218,9 +231,6 @@ export class App {
       return;
     }
 
-    let target = event.target;
-    if (target)
-      this.showMenu = target.tagName.toLowerCase() == "a" && target.className.indexOf("context-menu-btn") != -1;
     this.selectedObject = elem;
   }
 
@@ -234,8 +244,6 @@ export class App {
   }
 
   setContextMenuVisible(event, currRec) {
-    console.log(event);
-
     this.selectRow(currRec, event);
     this.showMenu = !this.showMenu;
     let rect = (event.target as HTMLElement).getBoundingClientRect();
@@ -296,15 +304,19 @@ export class App {
   }
 
   markAllObjects(event, record) {
-    for (let row of this.results) {
-      row.Marked = !row.Marked;
-    }
-
     this.allRowsSelected = !this.allRowsSelected;
+    for (let row of this.results) {
+      row.Marked = this.allRowsSelected;
+    }    
   }
   
-
   markSelectedObject(event, record) {
     
+  }
+
+  setShowMarkedOnly() {
+    this.showMarkedOnly = !this.showMarkedOnly;
+
+    this.search();
   }
 }
