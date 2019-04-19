@@ -1,6 +1,5 @@
 import {Aurelia} from 'aurelia-framework'
 import environment from './environment';
-import { Layout } from './layout';
 
 export function configure(aurelia: Aurelia) {
   aurelia.use

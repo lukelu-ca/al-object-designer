@@ -57,19 +57,6 @@ export class App {
         editable: false
       }
     };
-
-    
-    this.gridOptions.onGridReady = () => {
-      this.api = this.gridOptions.api;
-      this.columnApi = this.gridOptions.columnApi;
-
-      this.columnApi.setColumnVisible("EventType" as any, this.showEvents);
-      this.columnApi.setColumnVisible("EventName" as any, this.showEvents);
-      this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
-      this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
-      this.columnApi.setColumnVisible("Application" as any, !this.showEvents);  
-    }
-
   }
 
   attached() {
@@ -78,6 +65,17 @@ export class App {
     this.activeType = "";
     this.currentProject = false;
     this.vsSettings = vsSettings;
+
+    this.gridOptions.onGridReady = () => {
+      this.api = this.gridOptions.api;
+      this.columnApi = this.gridOptions.columnApi;
+
+      this.columnApi.setColumnVisible("EventType" as any, this.showEvents === true);
+      this.columnApi.setColumnVisible("EventName" as any, this.showEvents === true);
+      this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
+      this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
+      this.columnApi.setColumnVisible("Application" as any, !this.showEvents);  
+    }
 
     window.addEventListener('message', event => {
       this.loaded = false;
@@ -318,5 +316,10 @@ export class App {
     this.showMarkedOnly = !this.showMarkedOnly;
 
     this.search();
+  }
+
+  tableDesignerFieldChanged(row, event) {
+    this.sendCommand(row, 'TableDesignerField');
+    console.log(row);
   }
 }

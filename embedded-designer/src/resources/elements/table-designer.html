@@ -8,7 +8,8 @@
                     <ag-grid-aurelia #agGrid style="width: 100%; height: 100%;" class="ag-theme-material"
                         context.bind="$this" row-data.bind="objectInfo.Symbol.Fields" row-selection.bind="'single'"
                         grid-options.bind="gridOptions" row-selected.call="selectRow($event.node.data, $event)"
-                        selection-changed.call="selectRow($event.node.data, $event)">
+                        selection-changed.call="selectRow($event.node.data, $event)"
+                        cell-value-changed.call="tableDesignerFieldChanged($event.node.data, $event)">
                         <ag-grid-column header-name="ID" field="Id" width.bind="100"></ag-grid-column>
                         <ag-grid-column header-name="Name" field="Name" width.bind="200"></ag-grid-column>
                         <ag-grid-column header-name="Type" field="TypeDefinition.Name" width.bind="100">
