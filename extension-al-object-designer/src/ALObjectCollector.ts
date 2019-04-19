@@ -163,7 +163,7 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                     "Application": "Current Project" || "", //TODO: read app.json
                     "Version": "0.0.0.0" || "", //TODO: read app.json
                     "CanExecute": ["Table", "Page", "PageExtension", "PageCustomization", "TableExtension", "Report"].indexOf(ucType) != -1,
-                    "CanDesign": ["Page", "PageExtension"].indexOf(ucType) != -1,
+                    "CanDesign": ["Table", "Page", "PageExtension"].indexOf(ucType) != -1,
                     "CanCreatePage": ['Table', 'TableExtension'].indexOf(ucType) != -1,
                     "FsPath": file,
                     "EventName": 'not_an_event',
@@ -221,7 +221,7 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                             "Application": json.Name || "",
                             "Version": json.Version || "",
                             "CanExecute": ["Table", "Page", "PageExtension", "TableExtension", "PageCustomization", "Report"].indexOf(lType) != -1,
-                            "CanDesign": ["Page"].indexOf(lType) != -1,
+                            "CanDesign": ["Table", "Page"].indexOf(lType) != -1,
                             "CanCreatePage": ['Table', 'TableExtension'].indexOf(lType) != -1,
                             "FsPath": "",
                             //"Events": levents,

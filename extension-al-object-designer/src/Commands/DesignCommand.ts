@@ -14,7 +14,15 @@ export class DesignCommand extends ALCommandBase {
         let parser = new ALObjectParser();
         message = await parser.updateCollectorItem(message);
 
-        await ALPanel.open(this.extensionPath, ALObjectDesigner.PanelMode.Design, message);        
+        let mode = ALObjectDesigner.PanelMode.Design;
+        switch (message.Type.toLowerCase()) {
+            case 'table':
+                mode = ALObjectDesigner.PanelMode.Table;
+                break;
+            // TODO: to be extended later
+        }
+
+        await ALPanel.open(this.extensionPath, mode, message);        
         return;
     }
 }
