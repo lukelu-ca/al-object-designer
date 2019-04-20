@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(JSON.stringify(q));
         }
     }));
+
 }
 
 // this method is called when your extension is deactivated

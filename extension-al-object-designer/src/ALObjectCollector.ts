@@ -4,6 +4,7 @@ import * as utils from './utils';
 import { ALSymbolPackage, ALObjectDesigner } from './ALModules';
 import { ALObjectCollectorCache } from './ALObjectCollectorCache';
 import { ALEventGenerator } from './ALEventGenerator';
+import { ALCodeAnalysisBridge } from './ALCodeAnalysisBridge';
 const firstBy = require('thenby');
 
 export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {

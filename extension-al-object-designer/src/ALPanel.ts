@@ -6,6 +6,7 @@ import { ALObjectCollector } from './ALObjectCollector';
 import { ALTemplateCollector } from './ALTemplateCollector';
 import { ALObjectParser } from './ALObjectParser';
 import { ALObjectDesigner } from './ALModules';
+import { ALCodeAnalysisBridge } from './ALCodeAnalysisBridge';
 
 /**
  * Manages AL Object Designer webview panel
@@ -19,6 +20,7 @@ export class ALPanel {
     public objectInfo: any;
     public objectList?: Array<ALObjectDesigner.CollectorItem>;
     public eventList?: Array<ALObjectDesigner.CollectorItem>;
+    public static bridgeProperties: any;
 
     public static readonly viewType = 'alObjectDesigner';
 
@@ -28,7 +30,9 @@ export class ALPanel {
     private _vsSettings: any;
 
     public static async open(extensionPath: string, mode: ALObjectDesigner.PanelMode, objectInfo?: any) {
-        const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
+        // Getting available Property info from AL extension
+        let bridge = new ALCodeAnalysisBridge();
+        ALPanel.bridgeProperties = await bridge.cacheProperties();
 
         // If we already have a panel, show it.
         if (ALPanel.currentPanel 
@@ -205,6 +209,7 @@ export class ALPanel {
         content = content.replace('${panelMode}', this.panelMode);
         content = content.replace('${objectInfo}', JSON.stringify(this.objectInfo));
         content = content.replace('${vsSettings}', JSON.stringify(this._vsSettings));
+        content = content.replace('${bridgeProperties}', JSON.stringify(ALPanel.bridgeProperties));
 
         
         return content;

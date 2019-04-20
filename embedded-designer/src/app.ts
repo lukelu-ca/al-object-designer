@@ -2,6 +2,8 @@ const vscode = (window as any).vscode;
 const panelMode = (window as any).panelMode;
 const objectInfo = (window as any).objectInfo;
 const vsSettings = (window as any).vsSettings;
+const bridgeProperties = (window as any).bridgeProperties; 
+
 import { observable } from 'aurelia-framework';
 import { ColumnApi, GridApi, GridOptions } from 'ag-grid-community';
 
@@ -27,6 +29,8 @@ export class App {
 
   vsSettings: any;
 
+  bridgeProperties: any;
+
   @observable
   objectInfo: any;
 
@@ -45,7 +49,7 @@ export class App {
   dragOptions: any;
 
   @observable
-  allRowsSelected: boolean = false;  
+  allRowsSelected: boolean = false;
 
   showMarkedOnly: boolean = false;
 
@@ -65,6 +69,7 @@ export class App {
     this.activeType = "";
     this.currentProject = false;
     this.vsSettings = vsSettings;
+    this.bridgeProperties = bridgeProperties;
 
     this.gridOptions.onGridReady = () => {
       this.api = this.gridOptions.api;
@@ -74,7 +79,7 @@ export class App {
       this.columnApi.setColumnVisible("EventName" as any, this.showEvents === true);
       this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
       this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
-      this.columnApi.setColumnVisible("Application" as any, !this.showEvents);  
+      this.columnApi.setColumnVisible("Application" as any, !this.showEvents);
     }
 
     window.addEventListener('message', event => {
@@ -246,7 +251,7 @@ export class App {
     this.showMenu = !this.showMenu;
     let rect = (event.target as HTMLElement).getBoundingClientRect();
     this.contextMenu.style.left = rect.left + 'px';
-    this.contextMenu.style.top = rect.top + 'px';    
+    this.contextMenu.style.top = rect.top + 'px';
   }
 
   setEventsView() {
@@ -305,11 +310,11 @@ export class App {
     this.allRowsSelected = !this.allRowsSelected;
     for (let row of this.results) {
       row.Marked = this.allRowsSelected;
-    }    
+    }
   }
-  
+
   markSelectedObject(event, record) {
-    
+
   }
 
   setShowMarkedOnly() {
@@ -319,7 +324,7 @@ export class App {
   }
 
   tableDesignerFieldChanged(row, event) {
-    this.sendCommand(row, 'TableDesignerField');
-    console.log(row);
+    let message = { 'Change': row, 'Symbol': this.objectInfo.Symbol };
+    this.sendCommand(message, 'TableDesignerField');
   }
 }

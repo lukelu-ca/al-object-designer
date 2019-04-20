@@ -10,5 +10,6 @@ export class TableDesignerFieldCommand extends ALCommandBase {
     }
 
     async execute(message: any) {
+        console.log(message);
     }
 }
