@@ -22,15 +22,17 @@ namespace ALCodeAnalysisBridge
             }
 
             var path = args[0];
-            var dll = Assembly.LoadFile(path);
-            var res = dll.GetManifestResourceNames();
-
-            var result = ProcessResource(dll, "Microsoft.Dynamics.Nav.CodeAnalysis.PropertyDocumentationResources.resources");
-
             var outPath = args[1];
 
-            File.WriteAllText(outPath, JsonConvert.SerializeObject(result, Formatting.Indented));
+            var dll = Assembly.LoadFile(path);
+            var res = dll.GetManifestResourceNames();
+            var propInfo = dll.GetType("Microsoft.Dynamics.Nav.CodeAnalysis.PropertyKind");
 
+            var view = new PropertyData();
+            view.Properties = propInfo.GetMembers().Select(s => s.Name).ToList();
+            view.PropertyDescription = ProcessResource(dll, "Microsoft.Dynamics.Nav.CodeAnalysis.PropertyDocumentationResources.resources");
+            
+            File.WriteAllText(outPath, JsonConvert.SerializeObject(view, Formatting.Indented));
             Console.WriteLine($"Dictionary saved to {outPath}");
         }
 
@@ -50,6 +52,13 @@ namespace ALCodeAnalysisBridge
             }
 
             return result;
+        }
+
+        public class PropertyData
+        {
+            public List<string> Properties;
+
+            public Dictionary<string, string> PropertyDescription;
         }
     }
 }
