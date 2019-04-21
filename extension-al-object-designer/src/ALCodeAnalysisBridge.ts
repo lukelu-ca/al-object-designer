@@ -21,35 +21,6 @@ export class ALCodeAnalysisBridge {
     }
 
     async cacheProperties() {
-        await this.generatePropertyDictionary();
-
-        let contents: any = await utils.read(this.savePath);
-        let jsonContent = JSON.parse(contents) as Object;
-        let keys = Object.keys(jsonContent);
-        let newContent = [];
-        for (let key of keys) {
-            newContent.push({
-                'name': key,
-                'description': jsonContent[key]
-            });
-        }
-
-        let newFile = newContent.filter(f => {
-            return f.name.startsWith('Field_') === true;
-        }).map(m => {
-            return {
-                'name': m.name.split('_').pop(),
-                'description': m.description
-            }
-        });
-
-        await utils.write(this.savePath, JSON.stringify(newFile));
-
-        return newFile;
-    }
-
-    async generatePropertyDictionary() {        
-
         return new Promise((resolve, reject) => {
             const bat = spawn(this.bridgeExePath, [this.alLanguagePath, this.savePath]);
 
@@ -57,9 +28,28 @@ export class ALCodeAnalysisBridge {
                 reject(data.toString());
             });
 
-            bat.on('exit', (code: any) => {
-                resolve();
+            bat.on('exit', async (code: any) => {
+                let contents: any = await utils.read(this.savePath);
+                let jsonContent = JSON.parse(contents) as Object;
+                resolve(jsonContent);
             });
         });
+    }
+
+    mergeProperties(objectPart: string, existingProps: any, cachedProps: any) {
+        let checkProps = cachedProps.filter((f: any) => f.Name === objectPart);
+        checkProps = checkProps[0].Properties;
+
+        for (let p of existingProps) {
+            let checkProp = checkProps.filter((f: any) => f.Name === p.Name);
+            if (checkProp.length > 0) {            
+                checkProp = checkProp[0];
+                checkProp.Value = p.Value;
+                let updateIndex = checkProps.indexOf(checkProp);
+                checkProps[updateIndex] = checkProp;
+            }
+        }
+
+        return checkProps;
     }
 }

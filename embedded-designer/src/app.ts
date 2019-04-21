@@ -30,6 +30,7 @@ export class App {
   vsSettings: any;
 
   bridgeProperties: any;
+  fieldProperties: any;
 
   @observable
   objectInfo: any;
@@ -70,6 +71,7 @@ export class App {
     this.currentProject = false;
     this.vsSettings = vsSettings;
     this.bridgeProperties = bridgeProperties;
+    this.fieldProperties = this.bridgeProperties.filter(f => f.Name === 'Field');
 
     this.gridOptions.onGridReady = () => {
       this.api = this.gridOptions.api;

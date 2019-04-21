@@ -5,7 +5,7 @@ import { ALCommandHandler } from './ALCommandHandler';
 import { ALObjectCollector } from './ALObjectCollector';
 import { ALTemplateCollector } from './ALTemplateCollector';
 import { ALObjectParser } from './ALObjectParser';
-import { ALObjectDesigner } from './ALModules';
+import { ALObjectDesigner, ALSymbolPackage } from './ALModules';
 import { ALCodeAnalysisBridge } from './ALCodeAnalysisBridge';
 
 /**
@@ -192,7 +192,16 @@ export class ALPanel {
         } else {
             let parser = new ALObjectParser();
             this.objectInfo = await parser.updateCollectorItem(this.objectInfo);
-
+            let bridge = new ALCodeAnalysisBridge();
+            let bridgeProperties: any = await bridge.cacheProperties();
+            let fields = (this.objectInfo.Symbol as ALSymbolPackage.Table).Fields;
+            for (let field of fields) {
+                let fieldProps: any = JSON.parse(JSON.stringify(field.Properties));
+                let cachedProps = JSON.parse(JSON.stringify(bridgeProperties));
+                field.Properties = bridge.mergeProperties('Field', fieldProps, cachedProps);
+                let i = 0;
+            }
+                        
             await this._panel.webview.postMessage({ command: 'designer', objectInfo: this.objectInfo });
         }
     }
@@ -210,7 +219,6 @@ export class ALPanel {
         content = content.replace('${objectInfo}', JSON.stringify(this.objectInfo));
         content = content.replace('${vsSettings}', JSON.stringify(this._vsSettings));
         content = content.replace('${bridgeProperties}', JSON.stringify(ALPanel.bridgeProperties));
-
         
         return content;
     }

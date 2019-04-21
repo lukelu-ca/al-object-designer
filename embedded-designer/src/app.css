@@ -359,7 +359,7 @@ tr.selected:hover td#context-selected {
 
 .ui-sidebar.object-properties {
     height: 100%;
-    width: 300px !important;
+    width: 500px !important;
     max-width: inherit;
 }
 
