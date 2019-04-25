@@ -35,8 +35,8 @@ export class ALPanel {
         ALPanel.bridgeProperties = await bridge.cacheProperties();
 
         // If we already have a panel, show it.
-        if (ALPanel.currentPanel 
-            && ALPanel.currentPanel.panelMode == ALObjectDesigner.PanelMode.List 
+        if (ALPanel.currentPanel
+            && ALPanel.currentPanel.panelMode == ALObjectDesigner.PanelMode.List
             && mode == ALObjectDesigner.PanelMode.List) {
             ALPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
             return;
@@ -69,11 +69,11 @@ export class ALPanel {
         }
 
         let objectInfo: any = {
-            FsPath: path            
+            FsPath: path
         };
 
         let parser = new ALObjectParser();
-        let symbol =  await parser.parseFileBase(objectInfo.FsPath);
+        let symbol = await parser.parseFileBase(objectInfo.FsPath);
         objectInfo.Symbol = symbol;
         objectInfo.Id = symbol.Id;
         objectInfo.Name = symbol.Name;
@@ -192,16 +192,19 @@ export class ALPanel {
         } else {
             let parser = new ALObjectParser();
             this.objectInfo = await parser.updateCollectorItem(this.objectInfo);
-            let bridge = new ALCodeAnalysisBridge();
-            let bridgeProperties: any = await bridge.cacheProperties();
-            let fields = (this.objectInfo.Symbol as ALSymbolPackage.Table).Fields;
-            for (let field of fields) {
-                let fieldProps: any = JSON.parse(JSON.stringify(field.Properties));
-                let cachedProps = JSON.parse(JSON.stringify(bridgeProperties));
-                field.Properties = bridge.mergeProperties('Field', fieldProps, cachedProps);
-                let i = 0;
+
+            if (this.objectInfo.Type == 'Table') {
+                let bridge = new ALCodeAnalysisBridge();
+                let bridgeProperties: any = await bridge.cacheProperties();
+                let fields = (this.objectInfo.Symbol as ALSymbolPackage.Table).Fields;
+                for (let field of fields) {
+                    let fieldProps: any = JSON.parse(JSON.stringify(field.Properties));
+                    let cachedProps = JSON.parse(JSON.stringify(bridgeProperties));
+                    field.Properties = bridge.mergeProperties('Field', fieldProps, cachedProps);
+                    let i = 0;
+                }
             }
-                        
+
             await this._panel.webview.postMessage({ command: 'designer', objectInfo: this.objectInfo });
         }
     }
@@ -219,7 +222,7 @@ export class ALPanel {
         content = content.replace('${objectInfo}', JSON.stringify(this.objectInfo));
         content = content.replace('${vsSettings}', JSON.stringify(this._vsSettings));
         content = content.replace('${bridgeProperties}', JSON.stringify(ALPanel.bridgeProperties));
-        
+
         return content;
     }
 }

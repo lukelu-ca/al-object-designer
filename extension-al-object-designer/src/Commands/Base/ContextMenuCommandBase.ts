@@ -11,8 +11,9 @@ export class ContextMenuCommandBase extends ALCommandBase {
     }
 
     async execute(message: any) {
-        if (['Parse', 'NewList', 'NewCard', 'NewReport', 'NewXmlPort', 'NewQuery'].indexOf(message.Command) != -1) {
+        if (['Parse', 'NewList', 'NewCard', 'NewReport', 'NewXmlPort', 'NewQuery', 'NewTableExt', 'NewPageExt'].indexOf(message.Command) != -1) {
             let newOptions: any = this.getOptions(message);
+            let extensionObject: boolean = ["pageextension", 'tableextension'].indexOf(newOptions.Type) != -1;
 
             let parser = new ALObjectParser(),
                 parseMode = message.FsPath != '' ? ALObjectDesigner.ParseMode.File : ALObjectDesigner.ParseMode.Symbol,
@@ -21,7 +22,7 @@ export class ContextMenuCommandBase extends ALCommandBase {
             let fields = parsedObject.Fields,
                 caption = `${parsedObject.Name}${newOptions.SubType != "" ? ` ${newOptions.SubType}` : ''}`,
                 content = `
-${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + '}'}"
+${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true ? '_Ext' : '') + '}'}"${extensionObject === true ? ' extends "'+message.Name+'"' : '' }
 {
     Caption = '${'${2:' + caption + '}'}';`;
 
@@ -35,6 +36,8 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + '}'}"
     {
     `;
             }
+
+            if (extensionObject !== true) {
 
             content +=
                 `       
@@ -57,6 +60,8 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + '}'}"
             content += `
             }
         }`;
+
+            }
 
             if (newOptions.Type == "page") {
                 content += `

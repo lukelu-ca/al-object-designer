@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as utils from './utils';
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs-extra');
 
 export class ALCodeAnalysisBridge {
 
@@ -21,7 +22,12 @@ export class ALCodeAnalysisBridge {
     }
 
     async cacheProperties() {
+        if ((await fs.pathExists(this.savePath)) == false) {
+            await fs.ensureFile(this.savePath);
+        }
+
         return new Promise((resolve, reject) => {
+            
             const bat = spawn(this.bridgeExePath, [this.alLanguagePath, this.savePath]);
 
             bat.stderr.on('data', (data: any) => {

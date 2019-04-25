@@ -82,6 +82,7 @@ export class App {
       this.columnApi.setColumnVisible("Publisher" as any, !this.showEvents);
       this.columnApi.setColumnVisible("Version" as any, !this.showEvents);
       this.columnApi.setColumnVisible("Application" as any, !this.showEvents);
+      this.columnApi.setColumnVisible("Scope" as any, !this.showEvents);
     }
 
     window.addEventListener('message', event => {

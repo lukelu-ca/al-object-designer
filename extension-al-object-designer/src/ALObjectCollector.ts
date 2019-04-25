@@ -168,7 +168,8 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                     "CanCreatePage": ['Table', 'TableExtension'].indexOf(ucType) != -1,
                     "FsPath": file,
                     "EventName": 'not_an_event',
-                    "SymbolData": null
+                    "SymbolData": null,
+                    "Scope": 'Extension'
                 };
 
                 objs.push(newItem);
@@ -212,6 +213,14 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                     let tempArr = json[elem].map((t: any, index: number) => {
                         levents = levents.concat(this.extractEvents(lType, t, info));
 
+                        let scope = 'Extension';
+                        if (t.Properties) {
+                            let scopeProp = t.Properties.find((f: any) => f.Name === 'Scope');
+                            if (scopeProp) {
+                                scope = scopeProp.Value;
+                            }
+                        }
+
                         return {
                             "TypeId": j || "",
                             "Type": lType || "",
@@ -232,7 +241,8 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                                 'Path': filePath,
                                 'Type': elem,
                                 'Index': index
-                            }
+                            },
+                            "Scope": scope
                         };
                     });
 
