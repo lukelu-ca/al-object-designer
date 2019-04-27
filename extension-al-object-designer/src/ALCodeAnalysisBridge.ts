@@ -35,8 +35,7 @@ export class ALCodeAnalysisBridge {
             });
 
             bat.on('exit', async (code: any) => {
-                let contents: any = await utils.read(this.savePath);
-                let jsonContent = JSON.parse(contents) as Object;
+                let jsonContent: any = await fs.readJson(this.savePath);
                 resolve(jsonContent);
             });
         });

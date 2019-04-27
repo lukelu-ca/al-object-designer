@@ -3,11 +3,15 @@ import { ALCommandBase } from "./ALCommandBase";
 import { ALPanel } from "../../ALPanel";
 import { ALObjectParser } from "../../ALObjectParser";
 import { ALSymbolPackage, ALObjectDesigner } from "../../ALModules";
+import * as utils from '../../utils';
 
 export class ContextMenuCommandBase extends ALCommandBase {
 
+    _vsSettings: any;
+    
     public constructor(lObjectDesigner: ALPanel, lExtensionPath: string) {
         super(lObjectDesigner, lExtensionPath);
+        this._vsSettings = utils.getVsConfig();
     }
 
     async execute(message: any) {
@@ -31,6 +35,7 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true 
     PageType = ${newOptions.SubType};
     SourceTable = "${parsedObject.Name}";
     UsageCategory = ${newOptions.SubType == "Card" ? 'Documents' : 'Lists'};
+    ${newOptions.Type == "Page" ? 'ApplicationArea = All;' : ''}
     
     layout
     {
@@ -52,7 +57,8 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true 
                 content += `
                 ${newOptions.Field}("${newOptions.Type == "page" ? field.Name : field.Name.replace(/\s|\./g, '_')}"; "${field.Name}") 
                 {
-                        ${newOptions.Type == "Page" ? 'ApplicationArea = All;' : ''}
+                        ${newOptions.Type == "page" ? 'ApplicationArea = All;' : ''}
+                        ${newOptions.Type == "page" ? `//Caption = '${(field as any).Caption}';` : ''}
                 }
                 `;
             }

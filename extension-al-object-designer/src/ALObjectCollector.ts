@@ -5,6 +5,7 @@ import { ALSymbolPackage, ALObjectDesigner } from './ALModules';
 import { ALObjectCollectorCache } from './ALObjectCollectorCache';
 import { ALEventGenerator } from './ALEventGenerator';
 import { ALCodeAnalysisBridge } from './ALCodeAnalysisBridge';
+import { ALProjectCollector } from './ALProjectCollector';
 const firstBy = require('thenby');
 
 export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
@@ -129,6 +130,9 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
     }
 
     private async _CheckObjectInProject(objs: Array<any>) {
+        let projectCollector = new ALProjectCollector();
+        await projectCollector.init();
+
         let result = await workspace.findFiles('**/*.al');
 
         if (result.length == 0) {
@@ -154,15 +158,17 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
                 let targetObj = extendIndex != -1 ? parts.slice(extendIndex + 1, parts.length).join(" ").trim() : "";
                 targetObj = utils.replaceAll(targetObj, '"', '');
 
+                let projectInfo = projectCollector.getProjectFromObjectPath(file);
+
                 let newItem = {
                     "TypeId": this.alTypes.indexOf(ucType) || "",
                     "Type": ucType || "",
                     "Id": objId || "",
                     "Name": name || "",
                     "TargetObject": targetObj || "",
-                    "Publisher": "Current Project", //TODO: read app.json
-                    "Application": "Current Project" || "", //TODO: read app.json
-                    "Version": "0.0.0.0" || "", //TODO: read app.json
+                    "Publisher":projectInfo.publisher, //TODO: read app.json
+                    "Application": projectInfo.name || "", //TODO: read app.json
+                    "Version": projectInfo.version || "", //TODO: read app.json
                     "CanExecute": ["Table", "Page", "PageExtension", "PageCustomization", "TableExtension", "Report"].indexOf(ucType) != -1,
                     "CanDesign": ["Table", "Page", "PageExtension"].indexOf(ucType) != -1,
                     "CanCreatePage": ['Table', 'TableExtension'].indexOf(ucType) != -1,
