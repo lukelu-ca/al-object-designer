@@ -2,7 +2,7 @@ const vscode = (window as any).vscode;
 const panelMode = (window as any).panelMode;
 const objectInfo = (window as any).objectInfo;
 const vsSettings = (window as any).vsSettings;
-const bridgeProperties = (window as any).bridgeProperties; 
+const bridgeProperties = (window as any).bridgeProperties;
 
 import { observable } from 'aurelia-framework';
 import { ColumnApi, GridApi, GridOptions } from 'ag-grid-community';
@@ -168,6 +168,7 @@ export class App {
   }
 
   sendCommand(element, command, additionalCommands?: any) {
+    element = Object.assign({}, element);
     let name = element.Name;
     let type = element.Type;
     let id = element.Id;
@@ -181,6 +182,12 @@ export class App {
       }
     }
 
+    if (command == 'DefinitionExt' && element.TargetObject) {
+      command = 'Definition';
+      element.Name = element.TargetObject;
+      name = element.Name;
+    }
+
     this.showMenu = false;
 
     let message = {
@@ -189,8 +196,14 @@ export class App {
       Name: name,
       FsPath: element.FsPath,
       Command: command,
-      EventData: element
+      EventData: element,
+      Objects: [],
+      TargetObject: element.TargetObject
     };
+
+    if (command == 'BrowserPreview') {
+      message.Objects = this.data;
+    }
 
     let messages = [message];
 
