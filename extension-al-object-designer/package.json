@@ -2,7 +2,7 @@
     "name": "al-object-designer",
     "displayName": "AL Object Designer",
     "description": "Object Designer optimized for (Dynamics 365 Business Central) AL Language development.",
-    "version": "0.0.7-alpha.7",
+    "version": "0.0.7-alpha.8",
     "publisher": "martonsagi",
     "license": "MIT",
     "author": {
@@ -48,6 +48,10 @@
             {
                 "command": "extension.openALDesignWindow",
                 "title": "AL Designer"
+            },
+            {
+                "command": "extension.generateALTables",
+                "title": "Generate AL Tables"
             }
         ],
         "menus": {

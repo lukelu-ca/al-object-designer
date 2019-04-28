@@ -1,0 +1,9 @@
+Table;79000;Test Table
+Code;Code;20;Test Field Desc
+Description;Text;50
+
+Table;79001;Custom Table2
+Code;Code;20;Test Field Desc
+Description;Text;50
+Amount;Decimal
+Selection;Option; ,First,Second
