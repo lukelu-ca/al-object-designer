@@ -125,7 +125,7 @@ export class ALObjectParser implements ALObjectDesigner.ObjectParser {
         if (match) {
             let result: ObjectRegion = new ObjectRegion();
 
-            let lines: Array<string> = match.pre.trim().split('\r\n'),
+            let lines: Array<string> = match.pre.trim().split(/\r?\n/),
                 lastLine = lines.pop();
 
             let regionInfo: any = this.processRegion(lastLine as string);

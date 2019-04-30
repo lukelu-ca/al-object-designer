@@ -77,18 +77,25 @@ export class ALObjectCollector implements ALObjectDesigner.ObjectCollector {
             }
         }
 
-        for (let i = 0; i < dalFiles.length; i++) {
-            const element = dalFiles[i];
+        let tmpDalFiles = dalFiles.map(m => {
+            let name = path.basename(m);
 
-            let regex = /([aA-zZ\s]+)([0-9\.]+)(\.app)/g;
-            let matches = utils.getAllMatches(regex, element);
-            let matchInfo = matches[0];
+            return {
+                name: name,
+                fsPath: m
+            };
+        });
 
-            let check: any = dalFiles.filter(d => d.indexOf(matchInfo[1]) != -1);
-            if (check.length > 1) {
-                dalFiles.splice(i, 1);
-            }
-        }
+        dalFiles = tmpDalFiles
+            .filter((val, i, arr) => {
+                let result = arr.filter((f, j) => f.name == val.name);
+                if (result.length > 0) {
+                    return arr.indexOf(result[0]) === i;
+                }
+
+                return false;
+            })
+            .map(m => m.fsPath);
 
         let tasks: Array<Promise<any>> = [];
         for (let dal of dalFiles) {

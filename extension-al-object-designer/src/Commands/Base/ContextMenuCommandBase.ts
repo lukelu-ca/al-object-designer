@@ -25,8 +25,8 @@ export class ContextMenuCommandBase extends ALCommandBase {
 
             let fields = parsedObject.Fields,
                 caption = `${parsedObject.Name}${newOptions.SubType != "" ? ` ${newOptions.SubType}` : ''}`,
-                content = `
-${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true ? '_Ext' : '') + '}'}"${extensionObject === true ? ' extends "'+message.Name+'"' : '' }
+                content = 
+`${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true ? '_Ext' : '') + '}'}"${extensionObject === true ? ' extends "'+message.Name+'"' : '' }
 {
     Caption = '${'${2:' + caption + '}'}';`;
 
@@ -35,7 +35,7 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true 
     PageType = ${newOptions.SubType};
     SourceTable = "${parsedObject.Name}";
     UsageCategory = ${newOptions.SubType == "Card" ? 'Documents' : 'Lists'};
-    ${newOptions.Type == "Page" ? 'ApplicationArea = All;' : ''}
+    ApplicationArea = All;
     
     layout
     {
@@ -57,8 +57,8 @@ ${newOptions.Type} ${'${1:id}'} "${'${2:' + caption + (extensionObject === true 
                 content += `
                 ${newOptions.Field}("${newOptions.Type == "page" ? field.Name : field.Name.replace(/\s|\./g, '_')}"; "${field.Name}") 
                 {
-                        ${newOptions.Type == "page" ? 'ApplicationArea = All;' : ''}
-                        ${newOptions.Type == "page" ? `//Caption = '${(field as any).Caption}';` : ''}
+                    ${newOptions.Type == "page" ? 'ApplicationArea = All;' : ''}
+                    ${newOptions.Type == "page" ? `//Caption = '${(field as any).Caption}';` : ''}
                 }
                 `;
             }

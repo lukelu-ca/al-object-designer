@@ -28,19 +28,22 @@ export class ALTemplateCollector implements ALObjectDesigner.TemplateCollector {
         for (let i = 0; i < fpaths.length; i++) {
             const wkspace = fpaths[i];
             let fpath: any = path.join(wkspace.uri.fsPath, '.altemplates', path.sep);
-            let items: any = await utils.readDir(fpath);
-            items = items.filter((f: string) => f.endsWith('.json'));
+            let exists = await utils.folderExists(fpath);
+            if (exists === true) {
+                let items: any = await utils.readDir(fpath);
+                items = items.filter((f: string) => f.endsWith('.json'));
 
-            let files: Array<ALObjectDesigner.TemplateItem> = items.map(async (f: any) => {
-                let fp = path.join(fpath, f);
-                let content: any = await utils.read(fp);
-                content = JSON.parse(content);
-                content.path = fp;
+                let files: Array<ALObjectDesigner.TemplateItem> = items.map(async (f: any) => {
+                    let fp = path.join(fpath, f);
+                    let content: any = await utils.read(fp);
+                    content = JSON.parse(content);
+                    content.path = fp;
 
-                return content;
-            });
+                    return content;
+                });
 
-            templates = templates.concat(await Promise.all(files));
+                templates = templates.concat(await Promise.all(files));
+            }
         }
 
         templates.sort(firstBy('position'));
